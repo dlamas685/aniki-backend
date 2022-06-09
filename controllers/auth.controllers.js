@@ -93,7 +93,7 @@ const loginUser = async (req, res) => {
             success: true,
             uid: user.id,
             username: user.username,
-            msg: 'Bienvenido, se ha registrado correctamente.',
+            msg: 'Bienvenido, incio de sesión correcto.',
             email: user.email,
             name: user.name,
             token

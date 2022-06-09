@@ -21,15 +21,16 @@ const getFavorites = async (req, res = response) => {
 
 const updateFavorite = async (req, res = response) => {
     const {uid} = req;
-    const {idgql} = req.body 
+    const {idgql} = req.body; 
     try {
-        const result = await User.find({favorites: {$elemMatch: {$eq:idgql}}})
-        if (result.length === 0){
-            const user = await User.findOneAndUpdate(
-                {uid},
+        const result = await User.findById(uid);
+        const fav = [...result.favorites];
+        if (!fav.includes(idgql)) {
+            const user = await User.findByIdAndUpdate(
+                uid,
                 {$addToSet:{ favorites: idgql }},
                 {returnDocument: 'after'},
-            );
+            ); 
             return res.status(200).json({
                 success: true,
                 msg: 'fue agregado a favoritos.',
@@ -37,8 +38,8 @@ const updateFavorite = async (req, res = response) => {
             });
         }
         else {
-            const user = await User.findOneAndUpdate(
-                {uid},
+            const user = await User.findByIdAndUpdate(
+                uid,
                 {$pull:{ favorites: idgql  }},
                 {returnDocument: 'after'},
             );
